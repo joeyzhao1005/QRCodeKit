@@ -55,9 +55,9 @@ public class QRCodeShowResultWebActivity extends BaseAppCompatActivity implement
         else
             WebViewUtils.loadContent(this, wv, content);
 
-        ClipboardUtils.copy(this, content);
+        ClipboardUtils.copy(content);
 
-        ToastUtils.mkLongTimeToast(this, getString(R.string.copy_ok));
+        ToastUtils.mkLongTimeToast(getString(R.string.copy_ok));
 
 
     }

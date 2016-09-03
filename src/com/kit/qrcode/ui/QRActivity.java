@@ -9,20 +9,14 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
-import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
@@ -38,19 +32,21 @@ import com.kit.extend.qrcode.R;
 import com.kit.qrcode.camera.CameraManager;
 import com.kit.qrcode.decoding.CaptureActivityHandler;
 import com.kit.qrcode.decoding.InactivityTimer;
-import com.kit.ui.BaseAppCompatActivity;
+import com.kit.ui.BaseActivity;
+import com.kit.utils.ActionBarUtils;
+import com.kit.utils.ResWrapper;
 import com.kit.utils.StringUtils;
-import com.kit.utils.log.ZogUtils;
 import com.kit.utils.intentutils.BundleData;
 import com.kit.utils.intentutils.IntentUtils;
+import com.kit.utils.log.ZogUtils;
 
 import java.io.IOException;
 import java.util.Vector;
 //import com.ericssonlabs.R;
 //import com.hiaas.hibit.nemo.QRcode.view.ViewfinderView;
 
-public class QRActivity extends BaseAppCompatActivity implements Callback,
-        OnClickListener, IQRStrategy, IWhere2Go {
+public class QRActivity extends BaseActivity implements SurfaceHolder.Callback
+        , IQRStrategy, IWhere2Go {
     // private TopBar4Layout topBar;
 
     private CaptureActivityHandler handler;
@@ -71,8 +67,6 @@ public class QRActivity extends BaseAppCompatActivity implements Callback,
 
 //    private LinearLayout llLeft;
 
-    private Context mContext;
-    private Toolbar toolbar;
 
     private LoadDriverTask loadDriverTask;
 
@@ -96,7 +90,7 @@ public class QRActivity extends BaseAppCompatActivity implements Callback,
      */
     @Override
     public void where2go(BundleData bundleData) {
-        IntentUtils.gotoSingleNextActivity(mContext,
+        IntentUtils.gotoSingleNextActivity(this,
                 QRResultWebActivity.class, bundleData, true);
 
     }
@@ -109,22 +103,17 @@ public class QRActivity extends BaseAppCompatActivity implements Callback,
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void initTheme() {
+        super.initTheme();
+
+        ActionBarUtils.setHomeBack(this, R.drawable.ic_back, R.string.qr_code
+                , ResWrapper.getInstance().getColor(R.color.white));
+
+    }
 
     public void initWidget() {
-        mContext = this;
         setContentView(R.layout.qr_activity);
-
-        setToolbar();
-
-        // topBar = (TopBar4Layout) findViewById(R.id.topBar);
-        // setContentView(R.layout.camera);
-        // ViewUtil.addTopView(getApplicationContext(), this,
-        // R.string.scan_card);
-        // CameraManager.init(getApplication());
-        // viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
-        // tvTips = (TextView) this.findViewById(R.id.tvTips);
-        // hasSurface = false;
-        // inactivityTimer = new InactivityTimer(this);
 
         CameraManager.init(getApplication());
 
@@ -151,7 +140,7 @@ public class QRActivity extends BaseAppCompatActivity implements Callback,
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         surfaceView = (SurfaceView) findViewById(R.id.capture_preview);
         surfaceHolder = surfaceView.getHolder();
@@ -184,14 +173,13 @@ public class QRActivity extends BaseAppCompatActivity implements Callback,
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
         if (handler != null) {
             handler.quitSynchronously();
             handler = null;
         }
         CameraManager.get().closeDriver();
-        java.lang.System.gc();
         // IntentUtils.gotoNextActivity(this, MineActivity.class);
     }
 
@@ -199,33 +187,6 @@ public class QRActivity extends BaseAppCompatActivity implements Callback,
     protected void onStop() {
         inactivityTimer.shutdown();
         super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        // inactivityTimer.shutdown();
-        super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_weibo_detail, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    /* Called whenever we call invalidateOptionsMenu() */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-//        boolean etVisible = (et.getVisibility() == View.VISIBLE);
-//        menu.findItem(R.id.action_ok).setVisible(!etVisible);
-//        if(etVisible){
-//            ibKeyBoard.setImageResource(R.drawable.icn_check);
-//        }else {
-//            ibKeyBoard.setImageResource(R.drawable.msg_btn_keyboard);
-//        }
-
-        return super.onPrepareOptionsMenu(menu);
     }
 
 
@@ -242,35 +203,6 @@ public class QRActivity extends BaseAppCompatActivity implements Callback,
         }
     }
 
-    private void setToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(0x00000000);
-        toolbar.setTitle("返回");
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        ZogUtils.i("Build.VERSION.SDK_INT:" + Build.VERSION.SDK_INT);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            getSupportActionBar().setHomeActionContentDescription(R.string.back);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            getSupportActionBar().setHomeButtonEnabled(true);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle(R.string.back);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
-        }
-
-
-    }
 
     /**
      * Handler scan result
@@ -323,7 +255,7 @@ public class QRActivity extends BaseAppCompatActivity implements Callback,
         protected void onPostExecute(Boolean result) {
 
             if (handler == null) {
-                handler = new CaptureActivityHandler((QRActivity) mContext,
+                handler = new CaptureActivityHandler(QRActivity.this,
                         decodeFormats, characterSet);
             }
         }
@@ -440,14 +372,6 @@ public class QRActivity extends BaseAppCompatActivity implements Callback,
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        int id = view.getId();
-        if (id == R.id.llLeft) {
-            this.finish();
-        }
-
-    }
 
     @SuppressLint("NewApi")
     @SuppressWarnings("deprecation")
@@ -458,7 +382,7 @@ public class QRActivity extends BaseAppCompatActivity implements Callback,
             clip.setText(content); // 复制
         }
 
-        ZogUtils.i( "content:" + content);
+        ZogUtils.i("content:" + content);
 
 //        Intent resultIntent = new Intent();
 //        Bundle bundle = new Bundle();

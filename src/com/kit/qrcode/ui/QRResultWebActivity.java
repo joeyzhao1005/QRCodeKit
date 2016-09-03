@@ -15,9 +15,9 @@ public class QRResultWebActivity extends WebActivity {
 
         super.initWidgetWithExtra();
 
-        ClipboardUtils.copy(this, content);
+        ClipboardUtils.copy(content);
 
-        ToastUtils.mkLongTimeToast(this, getString(R.string.copy_ok));
+        ToastUtils.mkLongTimeToast(getString(R.string.copy_ok));
 
     }
 }

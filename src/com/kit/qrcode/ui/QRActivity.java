@@ -389,7 +389,7 @@ public class QRActivity extends BaseActivity implements SurfaceHolder.Callback
 //        bundle.putString("content", content);
 //        resultIntent.putExtras(bundle);
 
-        BundleData bundleData = new BundleData();
+        BundleData bundleData = new BundleData("qrWhereToGo");
         bundleData.put("content", content);
         where2go(bundleData);
 

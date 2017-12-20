@@ -38,7 +38,7 @@ import com.kit.utils.ResWrapper;
 import com.kit.utils.StringUtils;
 import com.kit.utils.intentutils.BundleData;
 import com.kit.utils.intentutils.IntentUtils;
-import com.kit.utils.log.ZogUtils;
+import com.kit.utils.log.Zog;
 
 import java.io.IOException;
 import java.util.Vector;
@@ -382,7 +382,7 @@ public class QRActivity extends BaseActivity implements SurfaceHolder.Callback
             clip.setText(content); // 复制
         }
 
-        ZogUtils.i("content:" + content);
+        Zog.i("content:" + content);
 
 //        Intent resultIntent = new Intent();
 //        Bundle bundle = new Bundle();

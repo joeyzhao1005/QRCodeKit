@@ -15,7 +15,7 @@ import com.kit.ui.BaseAppCompatActivity;
 import com.kit.utils.ClipboardUtils;
 import com.kit.utils.ToastUtils;
 import com.kit.utils.WebViewUtils;
-import com.kit.utils.log.ZogUtils;
+import com.kit.utils.log.Zog;
 
 @Deprecated
 public class QRCodeShowResultWebActivity extends BaseAppCompatActivity implements OnClickListener {
@@ -113,7 +113,7 @@ public class QRCodeShowResultWebActivity extends BaseAppCompatActivity implement
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        ZogUtils.i("Build.VERSION.SDK_INT:" + Build.VERSION.SDK_INT);
+        Zog.i("Build.VERSION.SDK_INT:" + Build.VERSION.SDK_INT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             getSupportActionBar().setHomeActionContentDescription(R.string.back);

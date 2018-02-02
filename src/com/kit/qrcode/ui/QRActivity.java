@@ -36,8 +36,8 @@ import com.kit.ui.BaseActivity;
 import com.kit.utils.ActionBarUtils;
 import com.kit.utils.ResWrapper;
 import com.kit.utils.StringUtils;
-import com.kit.utils.intentutils.BundleData;
-import com.kit.utils.intentutils.IntentUtils;
+import com.kit.utils.intent.BundleData;
+import com.kit.utils.intent.IntentUtils;
 import com.kit.utils.log.Zog;
 
 import java.io.IOException;

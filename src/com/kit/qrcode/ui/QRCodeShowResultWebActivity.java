@@ -63,10 +63,9 @@ public class QRCodeShowResultWebActivity extends BaseAppCompatActivity implement
     }
 
     @Override
-    public boolean getExtra() {
+    protected void getExtra() {
         Bundle bundle = getIntent().getExtras();
         content = bundle.getString("content");
-        return super.getExtra();
     }
 
     @Override

@@ -108,7 +108,7 @@ public class QRActivity extends BaseActivity implements SurfaceHolder.Callback
         super.initTheme();
 
         ActionBarUtils.setHomeBack(this, R.drawable.ic_back, R.string.qr_code
-                , ResWrapper.getInstance().getColor(R.color.white));
+                , ResWrapper.getColor(R.color.white));
 
     }
 
